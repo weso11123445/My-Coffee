@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} MyCart {% endblock %}
+{% block content %}
+    <div class="my-form container p-5 my-5 rounded border border-warning">
+    <h2 class="text-center">Cart</h2>
+    <hr>
+
+    {% if not request.user.is_authenticated and request.user.is_anonymous %}
+        <h4 class="alert alert-warning">
+            You Must Be <a href="{% url 'signin' %}" class="text-dark">Logged in </a>
+        </h4>
+    {% elif order %}
+
+        <h5>
+            UserName : {{order.user.username}}
+
+
+            <a    href="{% url 'products' %}" class="btn btn-outline-warning float-right m-1">Continue Shopping</a>
+
+                  <a   href="{% url 'payment' %}" class="btn btn-outline-secondary float-right m-1">Check Out</a>
+            <br><br>
+
+
+            <hr>
+            order Number : {{order.id}} with total {{total}}$ For {{orderdetails.count}} Products
+        </h5>
+
+   <table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Product</th>
+      <th scope="col">Image</th>
+      <th scope="col">Quantity</th>
+        <th scope="col">Price</th>
+        <th scope="col">SubTotals</th>
+        <th scope="col">Delete</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for line in orderdetails %}
+    <tr>
+      <th scope="row">{{forloop.counter}}</th>
+      <td>{{line.product.name}}</td>
+      <td><img src="{{line.product.photo.url}}" style="width:80px; height:80px;"></td>
+      <td> <a href="{% url 'sub_qty' orderdetails_id=line.id %}" class="btn btn-outline-warning btn-sm">-</a> {{line.quantity}}
+      <a href="{% url 'add_qty' orderdetails_id=line.id %}" class="btn btn-outline-warning btn-sm">+</a>
+      </td>
+        <td>{{line.price}}</td>
+      <td>{% widthratio line.quantity 1 line.price %}$</td>
+        <td><a href="{% url 'remove_from_cart' orderdetails_id=line.id %}" style="color:black;">Remove</a></td>
+    </tr>
+
+  {% empty %}
+
+  <h5 class=".alert alert-warning">
+            No Details Here <a href="{% url 'products' %}">All Products</a>
+  </h5>
+
+  {% endfor %}
+
+  </tbody>
+</table>
+
+    {% else %}
+
+        <h5 class=".alert alert-warning">
+            No Orders Here <a href="{% url 'products' %}">All Products</a>
+        </h5>
+
+
+     {% endif %}
+
+
+    <hr>
+
+
+{% endblock %}

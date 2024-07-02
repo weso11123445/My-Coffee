@@ -1,0 +1,6 @@
+   {% if messages %}
+                {% for msg in messages %}
+                    <div style="color:black; opacity:0.5; width:fit-content ; padding:20px ; position:relative ; left:50%;
+                            transform:translateX(-50%) ; background-color:#777">{{msg.tags|title}}->{{msg}}</div>
+                {% endfor %}
+   {% endif %}
